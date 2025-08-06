@@ -12,3 +12,20 @@ venv/
 # IDE files
 .vscode/
 *.code-workspace
+
+# Python virtual environment
+venv/
+
+# Environment variables
+.env
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Logs
+app.log
+
+# IDE files
+.vscode/
+*.code-workspace
