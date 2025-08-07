@@ -7,7 +7,6 @@ build/
 # Environment variables
 .env
 
-venv/
 
 # IDE files
 .vscode/
@@ -20,7 +19,7 @@ venv/
 .env
 
 # Python cache files
-__pycache__/
+/__pycache__/
 *.pyc
 
 # Logs

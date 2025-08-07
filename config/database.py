@@ -7,5 +7,5 @@ load_dotenv()
 # MongoDB connection
 MONGODB_URL = os.getenv("MONGODB_URL")
 client = AsyncIOMotorClient(MONGODB_URL)
-db = client.whatsapp
-collection = db.processed_messages
+database = client["whatsapp_clone"]
+collection = database["messages"]
