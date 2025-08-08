@@ -12,8 +12,8 @@ router = APIRouter()
 load_dotenv()
 MONGODB_URL = os.getenv("MONGODB_URL")
 client = AsyncIOMotorClient(MONGODB_URL)
-db = client["whatsapp_clone"]
-collection = db["messages"]
+db = client["whatsapp"]
+collection = db["processed_messages"]
 conversations_collection = db["conversations"]
 
 @router.get("/api/conversations", response_model=List[Dict])

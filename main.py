@@ -22,8 +22,8 @@ logger.debug("Starting FastAPI app...")
 load_dotenv()
 MONGODB_URL = os.getenv("MONGODB_URL")
 client = AsyncIOMotorClient(MONGODB_URL)
-database = client["whatsapp_clone"]
-collection = database["messages"]
+database = client["whatsapp"]
+collection = database["processed_messages"]
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -67,7 +67,6 @@ async def test_db():
     try:
         await collection.insert_one({"test": "ping"})
         result = await collection.find_one({"test": "ping"})
-        # Convert ObjectId to string for JSON serialization
         if result:
             result["_id"] = str(result["_id"])
         print(f"Test DB result: {result}")
