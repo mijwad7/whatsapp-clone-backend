@@ -101,7 +101,7 @@ async def main():
         messages_collection = db["processed_messages"]
         conversations_collection = db["conversations"]
         
-        payload_dir = Path("D:\\Work\\Django\\sample_payloads")
+        payload_dir = Path(__file__).parent / "sample_payloads"
         for file_path in payload_dir.glob("*.json"):
             await process_payload(str(file_path), messages_collection, conversations_collection)
     
