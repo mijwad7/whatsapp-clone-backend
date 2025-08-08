@@ -47,7 +47,7 @@ app = FastAPI(title="WhatsApp Web Clone API", lifespan=lifespan)
 # CORS for React frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "https://your-frontend-url"],
+    allow_origins=["http://localhost:5173", "https://whatsapp-clone-frontend-th45.onrender.com/"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
