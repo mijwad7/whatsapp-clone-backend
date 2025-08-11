@@ -17,7 +17,7 @@ This is the backend for a WhatsApp Web clone, built with FastAPI, MongoDB, and W
 ## Setup
 1. **Clone Repository**:
    ```bash
-   git clone https://github.com/mijwad7/whatsapp-clone-backend
+   git clone <your-backend-repo-url>
    cd whatsapp-clone-backend
    ```
 
@@ -39,7 +39,14 @@ This is the backend for a WhatsApp Web clone, built with FastAPI, MongoDB, and W
      ```
    - Ensure MongoDB Atlas allows `readWrite@whatsapp`.
 
-5. **Run Locally**:
+5. **Process Sample Payloads**:
+   - Sample payloads are included in the `sample_payloads` directory.
+   - Run:
+     ```bash
+     python process_webhook_payloads.py
+     ```
+
+6. **Run Locally**:
    ```bash
    uvicorn main:app --reload --host 0.0.0.0 --port 8000
    ```
@@ -65,7 +72,13 @@ This is the backend for a WhatsApp Web clone, built with FastAPI, MongoDB, and W
        - `PYTHON_VERSION`: `3.11`
      - **Instance Type**: Free (testing) or Starter ($7/month) for WebSocket.
 
-3. Verify:
+3. Process Payloads:
+   - After deployment, SSH into the Render instance or run locally to process `sample_payloads`:
+     ```bash
+     python process_webhook_payloads.py
+     ```
+
+4. Verify:
    - Visit `<backend-url>/api/conversations`.
    - Expect `wa_id: 918329446654` with “Hi Neha! ...”.
 
@@ -76,3 +89,7 @@ This is the backend for a WhatsApp Web clone, built with FastAPI, MongoDB, and W
 - `POST /api/webhook`: Process webhook payloads.
 - `WS /api/ws/{wa_id}`: WebSocket for real-time updates.
 
+
+   - Performance optimization?
+
+Share results and your preference for the next task!
