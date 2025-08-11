@@ -15,25 +15,32 @@ db = client["whatsapp"]
 messages_collection = db["processed_messages"]
 conversations_collection = db["conversations"]
 
+
 @router.post("/api/webhook")
 async def webhook_endpoint(payload: Dict[Any, Any]):
     try:
         print(f"Received webhook payload: {payload}")
-        
+
         # Check for entry in metaData or directly in payload
         entry = payload.get("metaData", {}).get("entry") or payload.get("entry")
         if not entry:
-            raise HTTPException(status_code=400, detail="Invalid payload: missing entry")
-        
+            raise HTTPException(
+                status_code=400, detail="Invalid payload: missing entry"
+            )
+
         entry = entry[0] if isinstance(entry, list) else entry
         if "changes" not in entry or not entry["changes"]:
-            raise HTTPException(status_code=400, detail="Invalid payload: missing changes")
-        
+            raise HTTPException(
+                status_code=400, detail="Invalid payload: missing changes"
+            )
+
         change = entry["changes"][0]
         value = change.get("value", {})
         if not value:
-            raise HTTPException(status_code=400, detail="Invalid payload: missing value")
-        
+            raise HTTPException(
+                status_code=400, detail="Invalid payload: missing value"
+            )
+
         # Handle messages
         messages = value.get("messages", [])
         for message in messages:
@@ -46,16 +53,16 @@ async def webhook_endpoint(payload: Dict[Any, Any]):
                     "text": text,
                     "timestamp": datetime.utcnow(),
                     "status": "received",
-                    "message_id": message_id
+                    "message_id": message_id,
                 }
                 await messages_collection.insert_one(new_message)
                 # Update conversation
                 await conversations_collection.update_one(
                     {"wa_id": wa_id},
                     {"$set": {"last_message": text, "timestamp": datetime.utcnow()}},
-                    upsert=True
+                    upsert=True,
                 )
-        
+
         # Handle statuses
         statuses = value.get("statuses", [])
         for status in statuses:
@@ -64,19 +71,14 @@ async def webhook_endpoint(payload: Dict[Any, Any]):
             if message_id and status_value in ["sent", "delivered", "read"]:
                 await messages_collection.update_one(
                     {"message_id": message_id},
-                    {"$set": {"status": status_value, "timestamp": datetime.utcnow()}}
+                    {"$set": {"status": status_value, "timestamp": datetime.utcnow()}},
                 )
-        
+
         return {"status": "received"}
     except Exception as e:
         print(f"Webhook processing failed: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Webhook processing failed: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Webhook processing failed: {str(e)}"
+        )
 
-@router.get("/api/webhook")
-async def verify_webhook(hub_mode: str = None, hub_verify_token: str = None, hub_challenge: str = None):
-    if hub_mode == "subscribe" and hub_verify_token and hub_challenge:
-        expected_token = os.getenv("VERIFY_TOKEN")
-        if hub_verify_token == expected_token:
-            return hub_challenge
-        raise HTTPException(status_code=403, detail="Invalid verify token")
-    raise HTTPException(status_code=400, detail="Invalid verification request")
+
